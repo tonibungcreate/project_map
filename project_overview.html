@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tonibung Project Map</title>
+
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+    <!-- Turf and jQuery code. -->
+    <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script> 
+    <script src="https://unpkg.c,om/togeojson"></script>
+
+
+<style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+
+        #map {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+        }
+
+        .popup_title {
+            position: absolute;
+            top: 40%;
+            bottom: 60%;
+            left: 50%;
+            width: 70%;
+            /* 1/3 of the viewport width */
+            height: 70%;
+            /* 1/3 of the viewport height */
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .popup_title img {
+            width: 100%;
+            /* Ensure image fills the container width */
+            height: auto;
+            /* Maintain aspect ratio */
+            display: block;
+            /* Prevents extra space below image */
+        }
+
+        .popup_title .close {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+        }
+    
+        .mapboxgl-ctrl-scale {
+            font-size: 15px; 
+            padding: 8px; 
+        }
+
+        .mapboxgl-ctrl-group button {
+            width: 42px; 
+            height: 42px; 
+        }
+
+        .mapboxgl-popup {
+            max-width: 400px;
+            font:
+                12px/20px 'Helvetica Neue',
+                Arial,
+                Helvetica,
+                sans-serif;
+        }
+
+        .map-overlay {
+            font:
+                12px/20px 'Helvetica Neue',
+                Arial,
+                Helvetica,
+                sans-serif;
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            border-radius: 3px;
+            position: absolute;
+            width: 25%;
+            top: 10px;
+            left: 80%;
+            padding: 10px;
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+    <style>
+    #menu {
+        position: absolute;
+        z-index: 1;
+        top: 68px;
+        left: 10px;
+        border: none; 
+        border-radius: 6px;
+        width: 130px;
+        font-family: 'Helvetica Heue', Helvetica/ sans-serif;
+    }
+
+    #menu a {
+        font-size: 15px;
+        color: #888888;
+        display: block;
+        margin: 0;
+        padding: 10px 15px;
+        border-radius: 6px; 
+        text-decoration: none;
+        border-bottom: 1px solid #696969;
+        text-align: center;
+        background-color: #ffffff; 
+    }
+
+    #menu a:last-child {
+        border: none;
+    }
+
+    #menu a:hover {
+        background-color: #f8f8f8;
+        color: #888888;
+    }
+
+    #menu a.active {
+        background-color: #888888;
+        color: #ffffff;
+    }
+
+    #menu a.active:hover {
+        background: #888888;
+    }
+    #menu-info {
+        background: black;
+        color: white;
+        display: block;
+        width: 116px; 
+        padding: 10px 8px; 
+        border: 1px solid black;  
+        border-radius: 6px; 
+        border-color: black; 
+        font-size: 15px;
+        font-family: 'Helvetica Heue', Helvetica sans-serif;
+        font-weight: bold; 
+        position: absolute; 
+        top: 10px; 
+        left: 8px; 
+        cursor: pointer; 
+        z-index: 1;
+    }
+
+    #menu-info a {
+        color: #8F9779
+    }
+
+    #menu-info a:hover {
+        background-color: #8F9779; 
+        color: #ffffff;
+    }
+
+    #menu-info a.active {
+        background-color: #8F9779; 
+    }
+
+    #menu-info a.active:hover {
+        background: #404040; 
+    } 
+    #info-button {
+        background: black;
+        color: white;
+        display: block;
+        width: 140px; 
+        padding: 10px 6px; 
+        border: 1px solid black; 
+        border-radius: 6px; 
+        font-size: 15px;
+        font-family: 'Helvetica Heue', Helvetica sans-serif;
+        font-weight: bold; 
+        position: absolute; 
+        bottom: 222px; 
+        right: 9px; 
+        cursor: pointer; 
+        z-index: 1;
+    }
+
+    #info-button a {
+        color: #8F9779
+    }
+
+    #info-button a:hover {
+        background-color: #ffffff; 
+        color: #ffffff;
+    }
+
+    #info-button a.active {
+        background-color: #ffffff; 
+    }
+
+    #info-button a.active:hover {
+        background: #ffffff; 
+    }
+
+    
+</style>
+    <script>
+////// map ////////////////////////////////////////////////////
+        mapboxgl.accessToken = 'pk.eyJ1IjoibGl6bWNjbGVhcnkiLCJhIjoiY203dXJvbG8zMDQxcTJqb2RobWJrb29rZiJ9.EXEp4Zxzb90S3p3977Pnfw';
+    const map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/lizmccleary/cmej46qal00h801ss6vsj3ar5',
+        zoom: 9,
+        pitch: 60,
+        bearing: 30,
+        center: [-123.16761577284362, 49.68914344599266]
+    });
+        
+        // add Find My Location to map 
+        map.addControl(new mapboxgl.NavigationControl());
+
+        // Add a scale control to the map
+        map.addControl(new mapboxgl.ScaleControl());
+
+        // adding 3d terrain
+        map.on('style.load', () => {
+            map.addSource('mapbox-dem', {
+                'type': 'raster-dem',
+                'url': 'mapbox://mapbox.mapbox-terrain-dem-v1',
+                'tileSize': 512,
+                'maxzoom': 14
+            });
+            // add the DEM source as a terrain layer with exaggerated height
+            map.setTerrain({ 'source': 'mapbox-dem', 'exaggeration': 1.5 });
+        }); 
+
+//// Start to add layers to build pop-ups and functions off of. ////
+
+    // Wait until the map has finished loading.
+    map.on('load', () => {
+
+    const canvas = map.getCanvasContainer();
+
+            let start;
+            let current;
+            let box; 
+
+        /// this is the project point layer 
+            map.addSource('projects_source', {
+                type: 'geojson',
+                data: 'https://raw.githubusercontent.com/lizmccleary/Squamish_Access_liz/main/EXT/squamish_boundary.geojson' // Replace with the URL of your GeoJSON data
+            });
+            map.addLayer({
+                id: 'Projects',
+                type: 'circle',
+                source: 'projects_source', 
+                layout: {
+                'visibility': 'visible'
+                }, 
+                paint: {
+                    'circle-color': '#AFFF00',
+                    'circle-radius': 5,
+                    'circle-stroke-width': .3,
+                    'circle-stroke-color': '#fff',
+                    'circle-opacity': 0.75
+                }
+            });
+
+        map.on('mouseenter', layerId, () => {
+            map.getCanvas().style.cursor = 'pointer';
+        });
+
+        map.on('mouseleave', layerId, () => {
+            map.getCanvas().style.cursor = '';
+        });
+    })
+
+// After the last frame rendered before the map enters an "idle" state.
+    map.on('idle', () => {
+        // If these three layers were not added to the map, abort
+        if (!map.getLayer('Projects')) {
+            return;
+        }
+    });
+            
+/// Create popup for Projects layer ///
+            map.on('click', 'Projects', (e) => {
+                const coordinates = e.lngLat;
+                const properties = e.features[0].properties;
+
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(`<strong>Project Name:</strong> ${properties.name}<br><strong>Project Type:</strong> ${properties.project_type}<br><strong>Capacity (KW):</strong> ${properties.capacity}<br><strong>Households:</strong> ${properties.Households}<br><strong>Start Date:</strong> ${properties.start_date}<br><strong>End Date:</strong> ${properties.end_date}<br><strong>Progress:</strong> ${properties.progress}`)
+                    .addTo(map);
+            });
+
+            // Change the cursor to a pointer when the mouse is over the private_land layer
+            map.on('mouseenter', 'Projects', () => {
+                map.getCanvas().style.cursor = 'pointer';
+            });
+
+            // Change it back to a pointer when it leaves
+            map.on('mouseleave', 'Projects', () => {
+                map.getCanvas().style.cursor = '';
+            });
+    </script>
+        
+</body>
+
+</html>
