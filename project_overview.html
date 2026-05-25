@@ -27,37 +27,6 @@
             width: 100%;
             height: 100%;
         }
-
-        .popup_title {
-            position: absolute;
-            top: 40%;
-            bottom: 60%;
-            left: 50%;
-            width: 70%;
-            /* 1/3 of the viewport width */
-            height: 70%;
-            /* 1/3 of the viewport height */
-            transform: translate(-50%, -50%);
-            padding: 20px;
-            z-index: 1000;
-        }
-
-        .popup_title img {
-            width: 100%;
-            /* Ensure image fills the container width */
-            height: auto;
-            /* Maintain aspect ratio */
-            display: block;
-            /* Prevents extra space below image */
-        }
-
-        .popup_title .close {
-            position: absolute;
-            top: 5px;
-            right: 10px;
-            font-size: 20px;
-            cursor: pointer;
-        }
     
         .mapboxgl-ctrl-scale {
             font-size: 15px; 
@@ -99,120 +68,6 @@
 </head>
 
 <body>
-    <style>
-    #menu {
-        position: absolute;
-        z-index: 1;
-        top: 68px;
-        left: 10px;
-        border: none; 
-        border-radius: 6px;
-        width: 130px;
-        font-family: 'Helvetica Heue', Helvetica/ sans-serif;
-    }
-
-    #menu a {
-        font-size: 15px;
-        color: #888888;
-        display: block;
-        margin: 0;
-        padding: 10px 15px;
-        border-radius: 6px; 
-        text-decoration: none;
-        border-bottom: 1px solid #696969;
-        text-align: center;
-        background-color: #ffffff; 
-    }
-
-    #menu a:last-child {
-        border: none;
-    }
-
-    #menu a:hover {
-        background-color: #f8f8f8;
-        color: #888888;
-    }
-
-    #menu a.active {
-        background-color: #888888;
-        color: #ffffff;
-    }
-
-    #menu a.active:hover {
-        background: #888888;
-    }
-    #menu-info {
-        background: black;
-        color: white;
-        display: block;
-        width: 116px; 
-        padding: 10px 8px; 
-        border: 1px solid black;  
-        border-radius: 6px; 
-        border-color: black; 
-        font-size: 15px;
-        font-family: 'Helvetica Heue', Helvetica sans-serif;
-        font-weight: bold; 
-        position: absolute; 
-        top: 10px; 
-        left: 8px; 
-        cursor: pointer; 
-        z-index: 1;
-    }
-
-    #menu-info a {
-        color: #8F9779
-    }
-
-    #menu-info a:hover {
-        background-color: #8F9779; 
-        color: #ffffff;
-    }
-
-    #menu-info a.active {
-        background-color: #8F9779; 
-    }
-
-    #menu-info a.active:hover {
-        background: #404040; 
-    } 
-    #info-button {
-        background: black;
-        color: white;
-        display: block;
-        width: 140px; 
-        padding: 10px 6px; 
-        border: 1px solid black; 
-        border-radius: 6px; 
-        font-size: 15px;
-        font-family: 'Helvetica Heue', Helvetica sans-serif;
-        font-weight: bold; 
-        position: absolute; 
-        bottom: 222px; 
-        right: 9px; 
-        cursor: pointer; 
-        z-index: 1;
-    }
-
-    #info-button a {
-        color: #8F9779
-    }
-
-    #info-button a:hover {
-        background-color: #ffffff; 
-        color: #ffffff;
-    }
-
-    #info-button a.active {
-        background-color: #ffffff; 
-    }
-
-    #info-button a.active:hover {
-        background: #ffffff; 
-    }
-
-    
-</style>
     <script>
 ////// map ////////////////////////////////////////////////////
         mapboxgl.accessToken = 'pk.eyJ1IjoibGl6bWNjbGVhcnkiLCJhIjoiY203dXJvbG8zMDQxcTJqb2RobWJrb29rZiJ9.EXEp4Zxzb90S3p3977Pnfw';
@@ -257,7 +112,7 @@
         /// this is the project point layer 
             map.addSource('projects_source', {
                 type: 'geojson',
-                data: 'https://raw.githubusercontent.com/lizmccleary/Squamish_Access_liz/main/EXT/squamish_boundary.geojson' // Replace with the URL of your GeoJSON data
+                data: 'https://raw.githubusercontent.com/lizmccleary/Squamish_Access_liz/main/EXT/squamish_boundary.geojson' 
             });
             map.addLayer({
                 id: 'Projects',
