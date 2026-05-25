@@ -67,10 +67,10 @@
     const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/lizmccleary/cmej46qal00h801ss6vsj3ar5',
-        zoom: 8,
+        zoom: 5,
         pitch: 0,
         bearing: 0,
-        center: [5.229121, 107.631027]
+        center: [107.631027, 5.229121]
     });
         
         // add Find My Location to map 
@@ -95,74 +95,56 @@
         }); 
 
 //// Start to add layers to build pop-ups and functions off of. ////
-
-    // Wait until the map has finished loading.
-    map.on('load', () => {
+map.on('load', () => {
 
     const canvas = map.getCanvasContainer();
 
-            let start;
-            let current;
-            let box; 
-
-        /// this is the project point layer 
-            map.addSource('projects_source', {
-                type: 'geojson',
-                data: 'project_list.geojson' 
-            });
-            map.addLayer({
-                id: 'Projects',
-                type: 'circle',
-                source: 'projects_source', 
-                layout: {
-                'visibility': 'visible'
-                }, 
-                paint: {
-                    'circle-color': '#AFFF00',
-                    'circle-radius': 5,
-                    'circle-stroke-width': .3,
-                    'circle-stroke-color': '#fff',
-                    'circle-opacity': 0.75
-                }
-            });
-
-        map.on('mouseenter', 'Projects', () => {
-            map.getCanvas().style.cursor = 'pointer';
-        });
-
-        map.on('mouseleave', 'Projects', () => {
-            map.getCanvas().style.cursor = '';
-        });
-    })
-
-// After the last frame rendered before the map enters an "idle" state.
-    map.on('idle', () => {
-        // If these three layers were not added to the map, abort
-        if (!map.getLayer('Projects')) {
-            return;
+    // Add the project point layer
+    map.addSource('projects_source', {
+        type: 'geojson',
+        data: 'project_list.geojson'
+    });
+    map.addLayer({
+        id: 'Projects',
+        type: 'circle',
+        source: 'projects_source',
+        layout: { 'visibility': 'visible' },
+        paint: {
+            'circle-color': '#AFFF00',
+            'circle-radius': 5,
+            'circle-stroke-width': .3,
+            'circle-stroke-color': '#fff',
+            'circle-opacity': 0.75
         }
     });
-            
-/// Create popup for Projects layer ///
-            map.on('click', 'Projects', (e) => {
-                const coordinates = e.lngLat;
-                const properties = e.features[0].properties;
 
-                new mapboxgl.Popup()
-                    .setLngLat(coordinates)
-                    .setHTML(`<strong>Project Name:</strong> ${properties.name}<br><strong>Project Type:</strong> ${properties.project_type}<br><strong>Capacity (KW):</strong> ${properties.capacity}<br><strong>Households:</strong> ${properties.Households}<br><strong>Start Date:</strong> ${properties.start_date}<br><strong>End Date:</strong> ${properties.end_date}<br><strong>Progress:</strong> ${properties.progress}`)
-                    .addTo(map);
-            });
+    // popup 
+    map.on('click', 'Projects', (e) => {
+        const coordinates = e.lngLat;
+        const properties = e.features[0].properties;
 
-            // Change the cursor to a pointer when the mouse is over the private_land layer
-            map.on('mouseenter', 'Projects', () => {
-                map.getCanvas().style.cursor = 'pointer';
-            });
+        new mapboxgl.Popup()
+            .setLngLat(coordinates)
+            .setHTML(`
+                <strong>Project Name:</strong> ${properties.PROJECT}<br>
+                <strong>Project Type:</strong> ${properties.TYPE}<br>
+                <strong>Capacity (KW):</strong> ${properties.CAPACITY}<br>
+                <strong>Households:</strong> ${properties.HOUSEHOLD}<br>
+                <strong>Start Date:</strong> ${properties.START}<br>
+                <strong>End Date:</strong> ${properties.COMPLETED}<br>
+                <strong>Progress:</strong> ${properties.PROGRESS}
+            `)
+            .addTo(map);
+    });
 
-            // Change it back to a pointer when it leaves
-            map.on('mouseleave', 'Projects', () => {
-                map.getCanvas().style.cursor = '';
-            });
+    map.on('mouseenter', 'Projects', () => {
+        map.getCanvas().style.cursor = 'pointer';
+    });
+
+    map.on('mouseleave', 'Projects', () => {
+        map.getCanvas().style.cursor = ''; 
+    });
+});
     </script>
         
 </body>
