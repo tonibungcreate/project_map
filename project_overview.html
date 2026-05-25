@@ -2,20 +2,13 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tonibung Project Map</title>
+<meta charset="utf-8">
+<title>Tonibung Project Overview</title>
+<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
+<link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
+<script src="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.js"></script>
 
-<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
-<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
-    <!-- Turf and jQuery code. -->
-    <script src="https://npmcdn.com/@turf/turf/turf.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.7.1.js"></script> 
-    <script src="https://unpkg.c,om/togeojson"></script>
-
-
-<style>
+    <style>
         body {
             margin: 0;
             padding: 0;
@@ -64,20 +57,20 @@
             display: none;
         }
     </style>
-
 </head>
 
 <body>
+    <div id="map"></div>
     <script>
 ////// map ////////////////////////////////////////////////////
         mapboxgl.accessToken = 'pk.eyJ1IjoibGl6bWNjbGVhcnkiLCJhIjoiY203dXJvbG8zMDQxcTJqb2RobWJrb29rZiJ9.EXEp4Zxzb90S3p3977Pnfw';
     const map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/lizmccleary/cmej46qal00h801ss6vsj3ar5',
-        zoom: 9,
-        pitch: 60,
-        bearing: 30,
-        center: [-123.16761577284362, 49.68914344599266]
+        zoom: 8,
+        pitch: 0,
+        bearing: 0,
+        center: [5.229121, 107.631027]
     });
         
         // add Find My Location to map 
@@ -85,6 +78,9 @@
 
         // Add a scale control to the map
         map.addControl(new mapboxgl.ScaleControl());
+
+        // Add fullscreen button
+        map.addControl(new mapboxgl.FullscreenControl());
 
         // adding 3d terrain
         map.on('style.load', () => {
@@ -112,7 +108,7 @@
         /// this is the project point layer 
             map.addSource('projects_source', {
                 type: 'geojson',
-                data: 'https://raw.githubusercontent.com/lizmccleary/Squamish_Access_liz/main/EXT/squamish_boundary.geojson' 
+                data: 'project_list.geojson' 
             });
             map.addLayer({
                 id: 'Projects',
@@ -130,11 +126,11 @@
                 }
             });
 
-        map.on('mouseenter', layerId, () => {
+        map.on('mouseenter', 'Projects', () => {
             map.getCanvas().style.cursor = 'pointer';
         });
 
-        map.on('mouseleave', layerId, () => {
+        map.on('mouseleave', 'Projects', () => {
             map.getCanvas().style.cursor = '';
         });
     })
