@@ -54,7 +54,7 @@
     <div id="map"></div>
     <script>
 
-    // embedded geojson file in JS variable
+    // embed js as a variable 
     const PROJECT_DATA = {"type":"FeatureCollection","name":"project_list","features":[
       {"type":"Feature","properties":{"PROJECT":"Long Lawen, Belaga, Sarawak","TYPE":"Hydro","CAPACITY":"15","HOUSEHOLD":"40","START":2001,"COMPLETED":null,"PROGRESS":"100%"},"geometry":{"type":"Point","coordinates":[114.2,2.67007]}},
       {"type":"Feature","properties":{"PROJECT":"Kg. Terian, Penampang, Sabah","TYPE":"Hydro","CAPACITY":"5","HOUSEHOLD":"25","START":2004,"COMPLETED":null,"PROGRESS":"100%"},"geometry":{"type":"Point","coordinates":[116.18,5.81]}},
@@ -115,7 +115,7 @@
       {"type":"Feature","properties":{"PROJECT":"Kg. Tadungus, Kalimantan Utara","TYPE":"Solar","CAPACITY":"5.5","HOUSEHOLD":"33","START":2022,"COMPLETED":2023,"PROGRESS":"on going"},"geometry":{"type":"Point","coordinates":[116.55,4.049305219]}}
     ]};
 
-    // ── Map setup ────────────────────────────────────────────────────────────
+    // initalize the map 
     mapboxgl.accessToken = 'pk.eyJ1IjoibGl6bWNjbGVhcnkiLCJhIjoiY203dXJvbG8zMDQxcTJqb2RobWJrb29rZiJ9.EXEp4Zxzb90S3p3977Pnfw';
 
     const map = new mapboxgl.Map({
@@ -131,7 +131,7 @@
     map.addControl(new mapboxgl.ScaleControl());
     map.addControl(new mapboxgl.FullscreenControl());
 
-    // 3D terrain
+    // add dem 
     map.on('style.load', () => {
         map.addSource('mapbox-dem', {
             type: 'raster-dem',
@@ -142,16 +142,16 @@
         map.setTerrain({ source: 'mapbox-dem', exaggeration: 1.5 });
     });
 
-    // ── All layers and interactions inside map.on('load') ────────────────────
+    // actions when map loads 
     map.on('load', () => {
 
-        // Use the inline GeoJSON object directly — no file fetch needed
+        // add projects source
         map.addSource('projects_source', {
             type: 'geojson',
             data: PROJECT_DATA
         });
 
-        // Invisible larger circle for easier clicking
+        // create invisible layer around points 
         map.addLayer({
             id: 'Projects-hitbox',
             type: 'circle',
@@ -164,7 +164,7 @@
             }
         });
 
-        // Visible styled circle
+        // point style
         map.addLayer({
             id: 'Projects',
             type: 'circle',
@@ -179,7 +179,7 @@
             }
         });
 
-        // Popup on click — fires on the larger hitbox layer
+        // popup on click
         map.on('click', 'Projects-hitbox', (e) => {
             const coordinates = e.lngLat;
             const p = e.features[0].properties;
@@ -198,7 +198,7 @@
                 .addTo(map);
         });
 
-        // Cursor changes on the hitbox layer
+        // change cursor
         map.on('mouseenter', 'Projects-hitbox', () => {
             map.getCanvas().style.cursor = 'pointer';
         });
