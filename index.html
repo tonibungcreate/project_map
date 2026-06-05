@@ -3,6 +3,7 @@
 
 <head>
 <meta charset="utf-8">
+<meta name="referrer" content="no-referrer-when-downgrade">
 <title>Tonibung Project Overview</title>
 <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.24.0/mapbox-gl.css" rel="stylesheet">
@@ -130,6 +131,7 @@
     map.addControl(new mapboxgl.NavigationControl());
     map.addControl(new mapboxgl.ScaleControl());
     map.addControl(new mapboxgl.FullscreenControl());
+
 
     // actions when map loads 
     map.on('load', () => {
