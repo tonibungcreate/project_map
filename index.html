@@ -136,12 +136,8 @@
         // add projects source
         map.addSource('projects_source', {
             type: 'geojson',
-            data: PROJECT_DATA
+            data: 'https://raw.githubusercontent.com/tonibungcreate/project_map/refs/heads/main/project_list.geojson'
         });
-        // map.addSource('projects_source', {
-        //     type: 'geojson', 
-        //     data: 'project_list.geojson'
-        // });
 
         // create invisible layer around points 
         map.addLayer({
