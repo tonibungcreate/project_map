@@ -118,13 +118,13 @@
             new mapboxgl.Popup()
                 .setLngLat(coordinates)
                 .setHTML(`
-                    <strong>Project Name:</strong> ${p.PROJECT ?? '—'}<br>
-                    <strong>Project Type:</strong> ${p.TYPE ?? '—'}<br>
-                    <strong>Capacity (KW):</strong> ${p.CAPACITY ?? '—'}<br>
-                    <strong>Households:</strong> ${p.HOUSEHOLD ?? '—'}<br>
-                    <strong>Start Date:</strong> ${p.START ?? '—'}<br>
-                    <strong>End Date:</strong> ${p.COMPLETED ?? '—'}<br>
-                    <strong>Progress:</strong> ${p.PROGRESS ?? '—'}
+                    <strong>Project Name:</strong> ${p.PROJECT}<br>
+                    <strong>Project Type:</strong> ${p.TYPE}<br>
+                    <strong>Capacity (KW):</strong> ${p.CAPACITY}<br>
+                    <strong>Households:</strong> ${p.HOUSEHOLD}<br>
+                    <strong>Start Date:</strong> ${p.START}<br>
+                    <strong>End Date:</strong> ${p.COMPLETED}<br>
+                    <strong>Progress:</strong> ${p.PROGRESS}
                 `)
                 .addTo(map);
         });
